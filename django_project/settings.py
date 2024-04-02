@@ -161,15 +161,19 @@ ACCOUNT_SESSION_REMEMBER = True
 # email-only login
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_MAX_EMAIL_ADDRESSES = 3
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+# account security
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400  # 1 day in seconds
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
@@ -189,3 +193,10 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     },
 }
+
+# Email configuration
+DEFAULT_FROM_EMAIL = "admin@djangobookstore.com"
+
+# To be updated with smtp backend as in the news app, before going live
+# Use env vars to flexibly switch between dev and prod - .env or separate prod .yml
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
