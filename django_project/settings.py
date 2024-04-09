@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Local
     "accounts",
     "pages",
+    "books",
 ]
 
 MIDDLEWARE = [
@@ -166,8 +167,10 @@ ACCOUNT_MAX_EMAIL_ADDRESSES = 3
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 # account security
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400  # 1 day in seconds
+ACCOUNT_RATE_LIMITS = {
+    "login": "10/m/ip",
+    "login_failed": "5/m/ip,5/5m/key",
+}
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = [
