@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    "debug_toolbar",
     # Local
     "accounts",
     "pages",
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     # Add the account middleware:
     "allauth.account.middleware.AccountMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "django_project.urls"
@@ -206,3 +208,11 @@ DEFAULT_FROM_EMAIL = "admin@djangobookstore.com"
 # To be updated with smtp backend as in the news app, before going live
 # Use env vars to flexibly switch between dev and prod - .env or separate prod .yml
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# django-debug-toolbar - ensures that our INTERNAL_IPS matches that of our Docker host
+import socket
+
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}

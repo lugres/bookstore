@@ -1,8 +1,8 @@
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView
 
-from .models import Book
+from .models import Book, Review
 
 
 class BookListView(LoginRequiredMixin, ListView):
@@ -19,8 +19,11 @@ class BookDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     login_url = "account_login"
     permission_required = "books.special_status"
 
-    def get_object(self, queryset=None):
-        return Book.objects.get(uuid=self.kwargs.get("uuid"))
+    slug_url_kwarg = "uuid"
+    slug_field = "uuid"
+    queryset = Book.objects.prefetch_related(
+        Prefetch("reviews", queryset=Review.objects.select_related("author"))
+    )
 
 
 class SearchResultsListView(ListView):

@@ -9,3 +9,4 @@ crispy-bootstrap5==0.7
 django-allauth==0.61.1
 environs[django]==9.5.0
 pillow==9.0.1
+django-debug-toolbar==4.3.0
