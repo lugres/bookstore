@@ -26,7 +26,7 @@ class BookDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     )
 
 
-class SearchResultsListView(ListView):
+class SearchResultsListView(LoginRequiredMixin, ListView):
     model = Book
     context_object_name = "book_list"
     template_name = "books/search_results.html"

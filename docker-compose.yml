@@ -3,7 +3,8 @@ version: "3.9"
 services:
   web:
     build: .
-    command: python /code/manage.py runserver 0.0.0.0:8000
+    # command: python /code/manage.py runserver 0.0.0.0:8000
+    command: gunicorn django_project.wsgi -b 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
@@ -11,7 +12,7 @@ services:
     depends_on:
       - db
     environment:
-      - "DJANGO_SECRET_KEY=django-insecure-cz9!nyj1wgmwt*a7pv#+tr8owi9f$$*s=#v+%nnbv+uqy51ki@-"
+      - "SECRET_KEY=django-insecure-cz9!nyj1wgmwt*a7pv#+tr8owi9f$$*s=#v+%nnbv+uqy51ki@-"
       - "DJANGO_DEBUG=True"
       - "DJANGO_SECURE_SSL_REDIRECT=False"
       - "DJANGO_SECURE_HSTS_SECONDS=0"
@@ -19,6 +20,13 @@ services:
       - "DJANGO_SECURE_HSTS_PRELOAD=False"
       - "DJANGO_SESSION_COOKIE_SECURE=False"
       - "DJANGO_CSRF_COOKIE_SECURE=False"
+      - "EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend"
+      - "EMAIL_HOST=localhost"
+      - "EMAIL_PORT=25"
+      - "EMAIL_USE_SSL=False"
+      - "EMAIL_HOST_USER="
+      - "EMAIL_HOST_PASSWORD="
+      - "DEFAULT_FROM_EMAIL=admin@djangobookstore.com"
   db:
     image: postgres:15
     volumes:
