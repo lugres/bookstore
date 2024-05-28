@@ -1,14 +1,29 @@
 {% extends "_base.html" %}
-{% load socialaccount %}
+{% load allauth i18n %}
 {% load crispy_forms_tags %}
 
 {% block title %}Sign Up{% endblock title %}
 
 {% block content %}
     <h2>Sign Up</h2>
-    <form method="post">
+
+    <p class="exist_account_info">Already have an account? Then please <a href="{{ login_url }}">Log In</a>.</p>
+
+    <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-success" type="submit">Sign Up</button>
     </form>
+
+    <br>
+    <p>Or use one of the social accounts:</p>
+    {% load account socialaccount %}
+
+    {% get_providers as socialaccount_providers %}
+    <ul class="social_providers_list">
+    {% for provider in socialaccount_providers %}
+        <a title="{{provider.name}}" class="btn btn-outline-dark" 
+         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i class="fa fa-{{provider.name|lower}}" id="social_icon"></i> {{provider.name}}</a>
+    {% endfor %}
+    </ul>
 {% endblock content %}
